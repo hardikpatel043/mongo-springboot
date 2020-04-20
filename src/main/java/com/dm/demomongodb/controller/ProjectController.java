@@ -36,6 +36,9 @@ public class ProjectController {
         return "Project Deleted with id "+ id;
     }
 
-
+    @GetMapping("/hellome")
+    public String hellocall(){
+        return "Hello Hardik";
+    }
 
 }
