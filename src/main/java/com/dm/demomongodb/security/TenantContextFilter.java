@@ -14,19 +14,21 @@ import java.io.IOException;
 @Component
 public class TenantContextFilter extends OncePerRequestFilter {
     public static final String TENANT_HTTP_HEADER = "X-Tenant";
+    public static final String DB_HTTP_HEADER = "X-db";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String targetTenantId = request.getHeader(TENANT_HTTP_HEADER);
+        String targetDb = request.getHeader(DB_HTTP_HEADER);
 //        TenantConfig currentTenant = getCurrentTenant(targetTenantId);
 
         MongoConnectionConfig currentTenant = new MongoConnectionConfig();
         if(targetTenantId.equals("atlas")){
             currentTenant.uri="mongodb+srv://admin:Th1skn32dm36xtZM@dm-gjy0w.gcp.mongodb.net/test?retryWrites=true&w=majority";
-            currentTenant.dbName="dm";
+            currentTenant.dbName=targetDb;
         }else{
-            currentTenant.uri="mongodb://admin:password@35.224.193.56:27017/admin";
-            currentTenant.dbName="admin";
+            currentTenant.uri="mongodb://admin:password@35.226.110.249:27017/admin?readPreference=primary";
+            currentTenant.dbName=targetDb;
         }
         CurrentMongoConfigHolder.set(currentTenant);
 
